@@ -7,12 +7,25 @@
 }
 
 :root {
-  --background: 0 0% 4%;
-  --foreground: 0 0% 100%;
-  --muted: 0 0% 60%;
+  /* ink = text and line colour, paper = page colour. Dark theme by default. */
+  --ink: 255 255 255;
+  --paper: 10 10 10;
+  --glass: 255 255 255;
+  --glass-alpha: 0.01;
   --depth: 0;
+  --veil: 1;
   --px: 0;
   --py: 0;
+}
+
+/* White version: swap ink and paper, and flip Tailwind's white/black utilities with them */
+[data-theme='light'] {
+  --ink: 10 10 10;
+  --paper: 255 255 255;
+  --glass: 10 10 10;
+  --glass-alpha: 0.035;
+  --color-white: #0a0a0a;
+  --color-black: #ffffff;
 }
 
 html {
@@ -21,8 +34,8 @@ html {
 
 body {
   margin: 0;
-  background: hsl(var(--background));
-  color: hsl(var(--foreground));
+  background: rgb(var(--paper));
+  color: rgb(var(--ink));
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
 }
@@ -48,7 +61,7 @@ h3 i,
   /* Accent text: same typeface, quieter tone */
   font-style: normal;
   font-weight: 300;
-  color: rgb(255 255 255 / 0.55);
+  color: rgb(var(--ink) / 0.55);
 }
 
 /* ---------- Video background ---------- */
@@ -59,13 +72,18 @@ h3 i,
   transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
-/* Gets darker the deeper you scroll */
+/* Dark theme: gets darker the deeper you scroll */
 .bg-depth {
   background: linear-gradient(
     180deg,
     rgb(0 0 0 / calc(0.28 + var(--depth) * 0.42)) 0%,
     rgb(0 0 0 / calc(0.38 + var(--depth) * 0.47)) 100%
   );
+}
+
+/* White theme: the video shows in the hero, then a white veil covers it as you scroll */
+[data-theme='light'] .bg-depth {
+  background: rgb(255 255 255 / calc(var(--veil) * 0.94));
 }
 
 /* ---------- Liquid glass ---------- */
@@ -75,14 +93,14 @@ h3 i,
     position: relative;
     overflow: hidden;
     border: none;
-    background: rgba(255, 255, 255, 0.01);
+    background: rgb(var(--glass) / var(--glass-alpha));
     background-blend-mode: luminosity;
   }
 
   .liquid-glass {
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
-    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 1px 1px rgb(var(--ink) / 0.1);
   }
 
   .liquid-glass-strong {
@@ -90,7 +108,7 @@ h3 i,
     -webkit-backdrop-filter: blur(50px);
     box-shadow:
       4px 4px 4px rgba(0, 0, 0, 0.05),
-      inset 0 1px 1px rgba(255, 255, 255, 0.15);
+      inset 0 1px 1px rgb(var(--ink) / 0.15);
   }
 
   .liquid-glass::before,
@@ -111,24 +129,24 @@ h3 i,
   .liquid-glass::before {
     background: linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.45) 0%,
-      rgba(255, 255, 255, 0.15) 20%,
+      rgb(var(--ink) / 0.45) 0%,
+      rgb(var(--ink) / 0.15) 20%,
       transparent 40%,
       transparent 60%,
-      rgba(255, 255, 255, 0.15) 80%,
-      rgba(255, 255, 255, 0.45) 100%
+      rgb(var(--ink) / 0.15) 80%,
+      rgb(var(--ink) / 0.45) 100%
     );
   }
 
   .liquid-glass-strong::before {
     background: linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.5) 0%,
-      rgba(255, 255, 255, 0.2) 20%,
+      rgb(var(--ink) / 0.5) 0%,
+      rgb(var(--ink) / 0.2) 20%,
       transparent 40%,
       transparent 60%,
-      rgba(255, 255, 255, 0.2) 80%,
-      rgba(255, 255, 255, 0.5) 100%
+      rgb(var(--ink) / 0.2) 80%,
+      rgb(var(--ink) / 0.5) 100%
     );
   }
 
@@ -143,7 +161,7 @@ h3 i,
     transition: opacity 0.35s ease;
     background: radial-gradient(
       260px circle at var(--mx, 50%) var(--my, 50%),
-      rgba(255, 255, 255, 0.16),
+      rgb(var(--ink) / 0.16),
       transparent 65%
     );
   }
@@ -161,22 +179,22 @@ h3 i,
   .field {
     width: 100%;
     border-radius: 0.9rem;
-    background: rgb(255 255 255 / 0.06);
+    background: rgb(var(--ink) / 0.06);
     padding: 0.7rem 0.9rem;
     font-size: 0.875rem;
-    color: #fff;
+    color: rgb(var(--ink));
     outline: none;
-    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.14);
+    box-shadow: inset 0 0 0 1px rgb(var(--ink) / 0.14);
     transition: box-shadow 0.2s ease, background 0.2s ease;
   }
 
   .field::placeholder {
-    color: rgb(255 255 255 / 0.4);
+    color: rgb(var(--ink) / 0.4);
   }
 
   .field:focus {
-    background: rgb(255 255 255 / 0.1);
-    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.55);
+    background: rgb(var(--ink) / 0.1);
+    box-shadow: inset 0 0 0 1px rgb(var(--ink) / 0.55);
   }
 }
 
@@ -225,7 +243,7 @@ h3 i,
 }
 
 :focus-visible {
-  outline: 2px solid rgb(255 255 255 / 0.8);
+  outline: 2px solid rgb(var(--ink) / 0.8);
   outline-offset: 3px;
 }
 

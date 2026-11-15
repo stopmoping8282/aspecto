@@ -25,7 +25,7 @@ function Hero({ onIndustry }) {
     <section className="relative flex min-h-screen flex-col justify-end">
       <motion.div
         {...rise(20, 0.5, 1)}
-        className="flex flex-col gap-8 bg-gradient-to-t from-black/85 via-black/55 to-transparent px-4 pb-8 pt-40 md:flex-row md:items-end md:justify-between md:px-8 md:pb-10"
+        className="flex flex-col gap-8 bg-gradient-to-t from-black via-black/70 to-transparent px-4 pb-8 pt-40 md:flex-row md:items-end md:justify-between md:px-8 md:pb-10"
       >
         <div>
           <motion.p {...rise(16, 0.6)} className="flex items-center gap-2.5 text-[13px] text-white/70">
@@ -55,7 +55,7 @@ function Hero({ onIndustry }) {
               <button
                 type="button"
                 onClick={() => onIndustry('oil')}
-                className="rounded-full px-5 py-3 text-[13px] font-medium text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.45)] backdrop-blur-sm transition-transform hover:scale-105 active:scale-95"
+                className="rounded-full px-5 py-3 text-[13px] font-medium text-white ring-1 ring-inset ring-white/45 backdrop-blur-sm transition-transform hover:scale-105 active:scale-95"
               >
                 {t.industries.oil.name}
               </button>
@@ -68,7 +68,7 @@ function Hero({ onIndustry }) {
             {t.survey.items.map((item) => (
               <span
                 key={item.title}
-                className="rounded-full bg-white/10 px-3.5 py-2 text-[11px] text-white/85 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.18)] backdrop-blur-sm"
+                className="rounded-full bg-white/10 px-3.5 py-2 text-[11px] text-white/85 ring-1 ring-inset ring-white/20 backdrop-blur-sm"
               >
                 {item.title}
               </span>

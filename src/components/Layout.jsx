@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'motion/react'
-import { Mail, Plus } from 'lucide-react'
+import { Mail, Moon, Plus, Sun } from 'lucide-react'
 import { useLang } from '../i18n'
 import { ORIGINAL_SITE, VIDEO_SRC } from '../content'
 import { useContactModal } from './Contact'
@@ -18,7 +18,7 @@ const LINKS = [
 ]
 
 /** Looping video behind everything. Shifts slightly with the mouse and darkens with scroll depth. */
-function Background() {
+function Background({ home }) {
   useEffect(() => {
     const root = document.documentElement
     const onMove = (e) => {
@@ -28,6 +28,9 @@ function Background() {
     const onScroll = () => {
       const max = document.documentElement.scrollHeight - window.innerHeight
       root.style.setProperty('--depth', max > 0 ? (window.scrollY / max).toFixed(4) : '0')
+      // White theme: how much of the video is veiled. Only the homepage hero shows it clearly.
+      const veil = home ? Math.min(1, window.scrollY / (window.innerHeight * 0.85)) : 1
+      root.style.setProperty('--veil', veil.toFixed(3))
     }
     window.addEventListener('mousemove', onMove, { passive: true })
     window.addEventListener('scroll', onScroll, { passive: true })
@@ -38,10 +41,10 @@ function Background() {
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onScroll)
     }
-  }, [])
+  }, [home])
 
   return (
-    <div className="fixed inset-0 z-0 overflow-hidden bg-neutral-950" aria-hidden="true">
+    <div className="fixed inset-0 z-0 overflow-hidden bg-black" style={{ background: '#0a0a0a' }} aria-hidden="true">
       <motion.div
         className="h-full w-full"
         initial={{ opacity: 0, scale: 1.05 }}
@@ -77,11 +80,44 @@ export function LogoMark({ className = 'h-7 w-7' }) {
   )
 }
 
+function initialTheme() {
+  try {
+    const saved = localStorage.getItem('aspecto-theme')
+    if (saved === 'light' || saved === 'dark') return saved
+  } catch {}
+  return 'light'
+}
+
+/** Switches between the white and the dark version of the site. */
+function ThemeToggle() {
+  const [theme, setTheme] = useState(initialTheme)
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme
+    try {
+      localStorage.setItem('aspecto-theme', theme)
+    } catch {}
+  }, [theme])
+
+  const next = theme === 'light' ? 'dark' : 'light'
+  return (
+    <button
+      type="button"
+      onClick={() => setTheme(next)}
+      aria-label={`Switch to ${next} theme`}
+      title={`Switch to ${next} theme`}
+      className="flex h-9 w-9 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-md transition-transform hover:scale-105 active:scale-95 md:h-10 md:w-10"
+    >
+      {theme === 'light' ? <Moon className="h-3.5 w-3.5" /> : <Sun className="h-3.5 w-3.5" />}
+    </button>
+  )
+}
+
 function LangToggle() {
   const { lang, setLang } = useLang()
   return (
     <div
-      className="flex rounded-full bg-black/40 p-1 text-[11px] backdrop-blur-md"
+      className="flex rounded-full bg-black/60 p-1 text-[11px] backdrop-blur-md"
       role="group"
       aria-label="Language"
     >
@@ -126,7 +162,11 @@ function Nav() {
     >
       <div className="flex items-start justify-between gap-3">
         <div className="pointer-events-auto flex items-center gap-2 md:gap-3">
-          <Link to="/" className="flex items-center gap-2.5 text-white" aria-label="Aspecto">
+          <Link
+            to="/"
+            className="flex items-center gap-2.5 rounded-full bg-black/60 p-1 text-white backdrop-blur-md md:pr-4"
+            aria-label="Aspecto"
+          >
             <LogoMark className="h-8 w-8" />
             <span className="hidden text-sm font-medium tracking-[0.3em] md:block">ASPECTO</span>
           </Link>
@@ -148,7 +188,7 @@ function Nav() {
             {t.nav.menu}
           </button>
 
-          <div className="hidden items-center gap-4 rounded-full bg-black/40 px-4 py-2.5 text-[11px] text-white/80 backdrop-blur-md md:flex">
+          <div className="hidden items-center gap-4 rounded-full bg-black/60 px-4 py-2.5 text-[11px] text-white/80 backdrop-blur-md md:flex">
             {t.brand.tags.map((tag) => (
               <span key={tag}>{tag}</span>
             ))}
@@ -156,12 +196,13 @@ function Nav() {
         </div>
 
         <div className="pointer-events-auto flex items-center gap-2">
+          <ThemeToggle />
           <LangToggle />
           <button
             type="button"
             onClick={openContact}
             aria-label={t.nav.cta}
-            className="flex items-center gap-2.5 rounded-full bg-black/40 p-1 text-[11px] text-white backdrop-blur-md transition-transform hover:scale-105 active:scale-95 md:pr-4"
+            className="flex items-center gap-2.5 rounded-full bg-black/60 p-1 text-[11px] text-white backdrop-blur-md transition-transform hover:scale-105 active:scale-95 md:pr-4"
           >
             <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white md:h-8 md:w-8">
               <svg viewBox="0 0 12 12" className="h-3 w-3 text-black" fill="currentColor" aria-hidden="true">
@@ -267,7 +308,7 @@ export default function Layout() {
 
   return (
     <>
-      <Background />
+      <Background home={pathname === '/'} />
       <div className="relative z-10 flex min-h-screen flex-col">
         <Nav />
         <main className="flex-1">
