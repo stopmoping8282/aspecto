@@ -1,0 +1,250 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-display: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Source Serif 4', ui-serif, Georgia, serif;
+  --radius: 1rem;
+}
+
+:root {
+  --background: 0 0% 4%;
+  --foreground: 0 0% 100%;
+  --muted: 0 0% 60%;
+  --depth: 0;
+  --px: 0;
+  --py: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 500;
+  letter-spacing: -0.04em;
+}
+
+h1 em,
+h2 em,
+h3 em,
+h1 i,
+h2 i,
+h3 i,
+.serif-italic {
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: rgb(255 255 255 / 0.8);
+  letter-spacing: -0.02em;
+}
+
+/* ---------- Video background ---------- */
+.bg-video {
+  /* Zoomed in from the bottom edge so the logo burned into the top of the footage is cropped out */
+  transform-origin: 50% 100%;
+  transform: scale(1.45) translate(calc(var(--px) * -10px), calc(var(--py) * -6px));
+  transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+/* Gets darker the deeper you scroll */
+.bg-depth {
+  background: linear-gradient(
+    180deg,
+    rgb(0 0 0 / calc(0.28 + var(--depth) * 0.42)) 0%,
+    rgb(0 0 0 / calc(0.38 + var(--depth) * 0.47)) 100%
+  );
+}
+
+/* ---------- Liquid glass ---------- */
+@layer components {
+  .liquid-glass,
+  .liquid-glass-strong {
+    position: relative;
+    overflow: hidden;
+    border: none;
+    background: rgba(255, 255, 255, 0.01);
+    background-blend-mode: luminosity;
+  }
+
+  .liquid-glass {
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  }
+
+  .liquid-glass-strong {
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+    box-shadow:
+      4px 4px 4px rgba(0, 0, 0, 0.05),
+      inset 0 1px 1px rgba(255, 255, 255, 0.15);
+  }
+
+  .liquid-glass::before,
+  .liquid-glass-strong::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1.4px;
+    pointer-events: none;
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+
+  .liquid-glass::before {
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.45) 0%,
+      rgba(255, 255, 255, 0.15) 20%,
+      transparent 40%,
+      transparent 60%,
+      rgba(255, 255, 255, 0.15) 80%,
+      rgba(255, 255, 255, 0.45) 100%
+    );
+  }
+
+  .liquid-glass-strong::before {
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.5) 0%,
+      rgba(255, 255, 255, 0.2) 20%,
+      transparent 40%,
+      transparent 60%,
+      rgba(255, 255, 255, 0.2) 80%,
+      rgba(255, 255, 255, 0.5) 100%
+    );
+  }
+
+  /* Cursor-following highlight */
+  .glow::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    background: radial-gradient(
+      260px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(255, 255, 255, 0.16),
+      transparent 65%
+    );
+  }
+
+  .glow:hover::after {
+    opacity: 1;
+  }
+
+  .tilt {
+    transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+    transition: transform 0.25s ease-out;
+    will-change: transform;
+  }
+
+  .field {
+    width: 100%;
+    border-radius: 0.9rem;
+    background: rgb(255 255 255 / 0.06);
+    padding: 0.7rem 0.9rem;
+    font-size: 0.875rem;
+    color: #fff;
+    outline: none;
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.14);
+    transition: box-shadow 0.2s ease, background 0.2s ease;
+  }
+
+  .field::placeholder {
+    color: rgb(255 255 255 / 0.4);
+  }
+
+  .field:focus {
+    background: rgb(255 255 255 / 0.1);
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.55);
+  }
+}
+
+/* ---------- Scroll reveal ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.8s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: var(--delay, 0ms);
+}
+
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.fade-up {
+  animation: fade-up 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(4px);
+  }
+}
+
+.bob {
+  animation: bob 1.8s ease-in-out infinite;
+}
+
+:focus-visible {
+  outline: 2px solid rgb(255 255 255 / 0.8);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .bg-video {
+    transform: scale(1.45);
+    transition: none;
+  }
+  .tilt {
+    transform: none;
+    transition: none;
+  }
+  .fade-up,
+  .bob {
+    animation: none;
+  }
+}
