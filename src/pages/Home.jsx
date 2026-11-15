@@ -1,215 +1,216 @@
-import { ArrowDown, ArrowRight, LifeBuoy, Mail, Plus, Radar, Sparkles, Waves } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { useCallback, useState } from 'react'
+import { motion } from 'motion/react'
+import { ArrowDown, Check, LifeBuoy, Radar, Waves } from 'lucide-react'
 import { useLang } from '../i18n'
 import DepthMeter from '../components/DepthMeter'
+import IndustryModal, { FleetCards } from '../components/Industry'
+import { EASE } from '../components/Layout'
 import ServiceExplorer from '../components/ServiceExplorer'
 import { CtaBand, NewsCards, PillButton, Section } from '../components/Sections'
 import { Glass, IconDot, Label, Reveal, Title } from '../components/ui'
 
-function Hero() {
+const rise = (y, delay, duration = 0.8) => ({
+  initial: { opacity: 0, y },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration, delay, ease: EASE },
+})
+
+/** Full-screen hero: content pinned to the bottom over a dark gradient. */
+function Hero({ onIndustry }) {
   const { t } = useLang()
-  const h = t.hero
+  const h = t.heroNew
   const dive = () => document.getElementById('dive')?.scrollIntoView({ behavior: 'smooth' })
 
   return (
-    <section className="mx-auto flex min-h-[calc(100vh-4.5rem)] max-w-7xl gap-4 px-4 pb-4 pt-4 lg:gap-6 lg:px-6 lg:pb-6">
-      {/* Left panel */}
-      <div className="liquid-glass-strong flex w-full flex-col rounded-3xl p-6 lg:w-[52%] lg:p-10">
-        <div className="flex flex-1 flex-col items-center justify-center py-10 text-center">
-          <span className="fade-up flex h-20 w-20 items-center justify-center rounded-full bg-white/10">
-            <Waves className="h-9 w-9" strokeWidth={1.5} />
-          </span>
-          <h1
-            className="fade-up mt-8 text-4xl leading-[1.02] tracking-[-0.05em] text-white sm:text-6xl lg:text-[3.4rem] xl:text-7xl"
-            style={{ animationDelay: '80ms' }}
+    <section className="relative flex min-h-screen flex-col justify-end">
+      <motion.div
+        {...rise(20, 0.5, 1)}
+        className="flex flex-col gap-8 bg-gradient-to-t from-black/85 via-black/55 to-transparent px-4 pb-8 pt-40 md:flex-row md:items-end md:justify-between md:px-8 md:pb-10"
+      >
+        <div>
+          <motion.p {...rise(16, 0.6)} className="flex items-center gap-2.5 text-[13px] text-white/70">
+            <span className="h-2 w-2 rounded-full bg-white" />
+            {t.brand.line}
+          </motion.p>
+
+          <motion.h1
+            {...rise(20, 0.8)}
+            className="mt-5 text-[clamp(2rem,8vw,4.5rem)] leading-none md:text-[clamp(2.5rem,5.5vw,4.5rem)]"
           >
             {h.title[0]}
             <br />
-            <em>{h.title[1]}</em>
-          </h1>
-          <p
-            className="fade-up mt-6 max-w-md text-sm leading-relaxed text-white/80 lg:text-base"
-            style={{ animationDelay: '160ms' }}
-          >
-            {h.sub}
-          </p>
-          <div className="fade-up mt-8" style={{ animationDelay: '240ms' }}>
-            <PillButton onClick={dive} icon={ArrowDown}>
-              {h.cta}
-            </PillButton>
-          </div>
-          <div
-            className="fade-up mt-8 flex flex-wrap justify-center gap-2"
-            style={{ animationDelay: '320ms' }}
-          >
-            {h.pills.map((p) => (
-              <Link
-                key={p}
-                to="/tjenester"
-                className="liquid-glass rounded-full px-4 py-2 text-xs text-white/80 transition-transform hover:scale-105"
+            {h.title[1]}
+          </motion.h1>
+
+          <motion.div {...rise(16, 1)} className="mt-7">
+            <p className="mb-3 text-[11px] uppercase tracking-widest text-white/50">{h.prompt}</p>
+            <div className="flex flex-wrap gap-2.5">
+              <button
+                type="button"
+                onClick={() => onIndustry('aqua')}
+                className="rounded-full bg-white px-5 py-3 text-[13px] font-medium text-black transition-transform hover:scale-105 active:scale-95"
               >
-                {p}
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        <div className="text-center">
-          <Label>{h.quoteLabel}</Label>
-          <p className="mt-3 text-lg leading-snug text-white lg:text-xl">
-            “{h.quote[0]} <span className="serif-italic">{h.quote[1]}</span>”
-          </p>
-          <div className="mt-4 flex items-center justify-center gap-3 text-xs tracking-widest text-white/60">
-            <span className="h-px w-10 bg-white/30" />
-            ASPECTO
-            <span className="h-px w-10 bg-white/30" />
-          </div>
-        </div>
-      </div>
-
-      {/* Right panel, desktop only */}
-      <div className="hidden w-[48%] flex-col lg:flex">
-        <div className="flex items-center justify-between">
-          <a
-            href="mailto:post@aspecto.no"
-            className="liquid-glass flex items-center gap-3 rounded-full py-2 pl-2 pr-4 text-sm text-white transition-transform hover:scale-105"
-          >
-            <IconDot>
-              <Mail className="h-4 w-4" />
-            </IconDot>
-            post@aspecto.no
-            <ArrowRight className="h-4 w-4 text-white/60" />
-          </a>
-          <Link
-            to="/karriere"
-            className="liquid-glass flex items-center gap-3 rounded-full py-2 pl-4 pr-2 text-sm transition-transform hover:scale-105 active:scale-95"
-          >
-            {h.hiring}
-            <IconDot>
-              <Sparkles className="h-4 w-4" />
-            </IconDot>
-          </Link>
-        </div>
-
-        <Glass tilt className="mt-8 w-56 self-end rounded-3xl p-5">
-          <h3 className="text-base">{h.cardTitle}</h3>
-          <p className="mt-2 text-xs leading-relaxed text-white/60">{h.cardText}</p>
-        </Glass>
-
-        <div className="liquid-glass mt-auto rounded-[2.5rem] p-4">
-          <div className="grid grid-cols-2 gap-4">
-            {[Waves, Radar].map((Icon, i) => (
-              <Glass key={i} tilt className="rounded-3xl p-5">
-                <IconDot>
-                  <Icon className="h-4 w-4" />
-                </IconDot>
-                <h3 className="mt-6 text-lg">{h.useCases[i].title}</h3>
-                <p className="mt-2 text-xs leading-relaxed text-white/60">{h.useCases[i].text}</p>
-              </Glass>
-            ))}
-          </div>
-          <Glass className="mt-4 flex items-center gap-4 rounded-3xl p-4">
-            <span className="flex h-16 w-24 shrink-0 items-center justify-center rounded-2xl bg-white/10">
-              <LifeBuoy className="h-6 w-6" strokeWidth={1.5} />
-            </span>
-            <div className="flex-1">
-              <h3 className="text-base">{h.useCases[2].title}</h3>
-              <p className="mt-1 text-xs leading-relaxed text-white/60">{h.useCases[2].text}</p>
+                {t.industries.aqua.name}
+              </button>
+              <button
+                type="button"
+                onClick={() => onIndustry('oil')}
+                className="rounded-full px-5 py-3 text-[13px] font-medium text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.45)] backdrop-blur-sm transition-transform hover:scale-105 active:scale-95"
+              >
+                {t.industries.oil.name}
+              </button>
             </div>
-            <Link
-              to="/tjenester"
-              aria-label={t.servicesIntro.all}
-              className="liquid-glass flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-transform hover:scale-105"
-            >
-              <Plus className="h-4 w-4" />
-            </Link>
-          </Glass>
+          </motion.div>
         </div>
-      </div>
+
+        <motion.div {...rise(16, 1.1)} className="flex flex-col gap-4 md:items-end lg:pr-16">
+          <div className="flex flex-wrap gap-2">
+            {t.survey.items.map((item) => (
+              <span
+                key={item.title}
+                className="rounded-full bg-white/10 px-3.5 py-2 text-[11px] text-white/85 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.18)] backdrop-blur-sm"
+              >
+                {item.title}
+              </span>
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={dive}
+            className="inline-flex items-center gap-2 text-[13px] text-white/70 transition-colors hover:text-white"
+          >
+            {h.scroll} <ArrowDown className="bob h-3.5 w-3.5" />
+          </button>
+        </motion.div>
+      </motion.div>
     </section>
   )
 }
 
 export default function Home() {
   const { t } = useLang()
+  const [industry, setIndustry] = useState(null)
+  const closeIndustry = useCallback(() => setIndustry(null), [])
 
   return (
-    <div className="lg:pr-16">
-      <DepthMeter />
-      <Hero />
+    <>
+      <Hero onIndustry={setIndustry} />
+      <IndustryModal industry={industry} onChange={setIndustry} onClose={closeIndustry} />
 
-      <Section id="dive" className="scroll-mt-24">
-        <div className="grid items-end gap-8 lg:grid-cols-2 lg:gap-16">
-          <Reveal>
-            <Label>{t.about.label}</Label>
-            <Title
-              parts={t.about.title}
-              className="mt-4 text-5xl leading-[1.05] tracking-[-0.05em] lg:text-7xl"
-            />
-            <p className="serif-italic mt-6 text-2xl leading-snug">{t.about.lead}</p>
+      <div className="lg:pr-16">
+        <DepthMeter />
+
+        <Section id="dive" className="scroll-mt-24">
+          <div className="grid items-end gap-8 lg:grid-cols-2 lg:gap-16">
+            <Reveal>
+              <Label>{t.about.label}</Label>
+              <Title parts={t.about.title} className="mt-4 text-5xl leading-none lg:text-7xl" />
+              <p className="mt-6 text-2xl font-light leading-snug text-white/70">{t.about.lead}</p>
+            </Reveal>
+            <Reveal delay={120}>
+              <Glass strong className="rounded-3xl p-7 lg:p-9">
+                <p className="text-base leading-relaxed text-white/80">{t.about.text}</p>
+                <PillButton to="/omoss" className="mt-7">
+                  {t.about.more}
+                </PillButton>
+              </Glass>
+            </Reveal>
+          </div>
+
+          <Reveal className="mt-12">
+            <Label>{t.survey.label}</Label>
+            <div className="mt-4 grid gap-4 md:grid-cols-3">
+              {[Waves, Radar, LifeBuoy].map((Icon, i) => (
+                <Glass key={i} tilt className="rounded-3xl p-6">
+                  <IconDot>
+                    <Icon className="h-4 w-4" />
+                  </IconDot>
+                  <h3 className="mt-8 text-2xl">{t.survey.items[i].title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-white/60">{t.survey.items[i].text}</p>
+                </Glass>
+              ))}
+            </div>
           </Reveal>
-          <Reveal delay={120}>
-            <Glass strong className="rounded-3xl p-7 lg:p-9">
-              <p className="text-base leading-relaxed text-white/80">{t.about.text}</p>
-              <PillButton to="/omoss" className="mt-7">
-                {t.about.more}
-              </PillButton>
+        </Section>
+
+        <Section>
+          <Reveal className="mb-10">
+            <Label>{t.fleet.label}</Label>
+            <Title parts={t.fleet.title} stacked className="mt-4 text-4xl leading-none lg:text-6xl" />
+            <p className="mt-5 max-w-xl text-base leading-relaxed text-white/80">{t.fleet.text}</p>
+          </Reveal>
+          <Reveal delay={100}>
+            <FleetCards />
+          </Reveal>
+        </Section>
+
+        <Section>
+          <Reveal className="mb-10 flex flex-wrap items-end justify-between gap-6">
+            <div>
+              <Label>{t.servicesIntro.label}</Label>
+              <Title parts={t.servicesIntro.title} className="mt-4 text-5xl leading-none lg:text-6xl" />
+              <p className="mt-5 max-w-xl text-base leading-relaxed text-white/80">
+                {t.servicesIntro.text}
+              </p>
+            </div>
+            <PillButton to="/tjenester">{t.servicesIntro.all}</PillButton>
+          </Reveal>
+          <Reveal delay={100}>
+            <ServiceExplorer />
+          </Reveal>
+        </Section>
+
+        <Section>
+          <Reveal>
+            <Glass strong className="rounded-[2.5rem] p-8 lg:grid lg:grid-cols-[2fr_3fr] lg:gap-14 lg:p-14">
+              <div>
+                <Label>{t.artskart.label}</Label>
+                <Title parts={t.artskart.title} stacked className="mt-4 text-4xl leading-none lg:text-5xl" />
+                <p className="mt-8 text-7xl font-light tracking-[-0.04em] lg:text-8xl">{t.artskart.stat}</p>
+                <p className="mt-2 max-w-xs text-sm text-white/60">{t.artskart.statLabel}</p>
+              </div>
+              <div className="mt-8 lg:mt-0 lg:self-end">
+                <p className="text-base leading-relaxed text-white/80">{t.artskart.text}</p>
+                <ul className="mt-6 flex flex-col gap-2.5 text-sm text-white/85">
+                  {t.artskart.points.map((p) => (
+                    <li key={p} className="flex gap-2.5">
+                      <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-white/50" />
+                      {p}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </Glass>
           </Reveal>
-        </div>
-      </Section>
+        </Section>
 
-      <Section>
-        <Reveal className="mb-10 flex flex-wrap items-end justify-between gap-6">
-          <div>
-            <Label>{t.servicesIntro.label}</Label>
-            <Title
-              parts={t.servicesIntro.title}
-              className="mt-4 text-5xl leading-[1.05] tracking-[-0.05em] lg:text-6xl"
-            />
-            <p className="mt-5 max-w-xl text-base leading-relaxed text-white/80">
-              {t.servicesIntro.text}
-            </p>
-          </div>
-          <PillButton to="/tjenester">{t.servicesIntro.all}</PillButton>
-        </Reveal>
-        <Reveal delay={100}>
-          <ServiceExplorer />
-        </Reveal>
-      </Section>
-
-      <Section>
-        <Reveal>
-          <Glass strong className="rounded-[2.5rem] p-8 lg:p-14">
+        <Section>
+          <Reveal>
             <Label>{t.testimonial.label}</Label>
-            <blockquote className="mt-6 text-2xl leading-snug tracking-[-0.02em] lg:text-4xl">
+            <blockquote className="mt-6 max-w-5xl text-2xl font-light leading-snug tracking-[-0.02em] lg:text-4xl">
               “{t.testimonial.quote}”
             </blockquote>
             <div className="mt-8 flex items-center gap-3 text-xs uppercase tracking-widest text-white/60">
               <span className="h-px w-10 bg-white/30" />
               {t.testimonial.author}
             </div>
-          </Glass>
-        </Reveal>
-      </Section>
+          </Reveal>
+        </Section>
 
-      <Section>
-        <Reveal className="mb-10 flex flex-wrap items-end justify-between gap-6">
-          <div>
-            <Label>{t.news.label}</Label>
-            <Title
-              parts={t.news.title}
-              stacked
-              className="mt-4 text-4xl leading-[1.08] tracking-[-0.05em] lg:text-6xl"
-            />
-            <p className="mt-5 max-w-xl text-base leading-relaxed text-white/80">{t.news.text}</p>
-          </div>
-          <PillButton to="/nyheter">{t.news.all}</PillButton>
-        </Reveal>
-        <NewsCards />
-      </Section>
+        <Section>
+          <Reveal className="mb-10 flex flex-wrap items-end justify-between gap-6">
+            <div>
+              <Label>{t.news.label}</Label>
+              <Title parts={t.news.title} stacked className="mt-4 text-4xl leading-[1.05] lg:text-6xl" />
+              <p className="mt-5 max-w-xl text-base leading-relaxed text-white/80">{t.news.text}</p>
+            </div>
+            <PillButton to="/nyheter">{t.news.all}</PillButton>
+          </Reveal>
+          <NewsCards />
+        </Section>
 
-      <CtaBand />
-    </div>
+        <CtaBand />
+      </div>
+    </>
   )
 }

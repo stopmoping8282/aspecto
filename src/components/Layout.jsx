@@ -1,11 +1,15 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
-import { Mail, Menu, Sparkles, X } from 'lucide-react'
+import { AnimatePresence, motion } from 'motion/react'
+import { Mail, Plus } from 'lucide-react'
 import { useLang } from '../i18n'
 import { ORIGINAL_SITE, VIDEO_SRC } from '../content'
 import { useContactModal } from './Contact'
 
+export const EASE = [0.16, 1, 0.3, 1]
+
 const LINKS = [
+  ['/', 'home'],
   ['/omoss', 'about'],
   ['/tjenester', 'services'],
   ['/nyheter', 'news'],
@@ -37,32 +41,58 @@ function Background() {
   }, [])
 
   return (
-    <div className="fixed inset-0 z-0 overflow-hidden bg-neutral-900" aria-hidden="true">
-      <video
-        className="bg-video h-full w-full object-cover"
-        src={VIDEO_SRC}
-        autoPlay
-        loop
-        muted
-        playsInline
-      />
+    <div className="fixed inset-0 z-0 overflow-hidden bg-neutral-950" aria-hidden="true">
+      <motion.div
+        className="h-full w-full"
+        initial={{ opacity: 0, scale: 1.05 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 1.8, ease: EASE }}
+      >
+        <video
+          className="bg-video h-full w-full object-cover"
+          src={VIDEO_SRC}
+          autoPlay
+          loop
+          muted
+          playsInline
+        />
+      </motion.div>
       <div className="bg-depth absolute inset-0" />
     </div>
+  )
+}
+
+/** Simple wave-in-a-circle mark, used next to the wordmark. */
+export function LogoMark({ className = 'h-7 w-7' }) {
+  return (
+    <svg viewBox="0 0 32 32" fill="none" className={className} aria-hidden="true">
+      <circle cx="16" cy="16" r="14.5" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        d="M6 20c5-1 8-5 9-11M10.5 23.5c5-1.500 8.500-6 9.500-12.500M16 26c4.500-2 7.500-6.500 8-12"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
   )
 }
 
 function LangToggle() {
   const { lang, setLang } = useLang()
   return (
-    <div className="liquid-glass flex rounded-full p-1 text-xs" role="group" aria-label="Language">
+    <div
+      className="flex rounded-full bg-black/40 p-1 text-[11px] backdrop-blur-md"
+      role="group"
+      aria-label="Language"
+    >
       {['no', 'en'].map((code) => (
         <button
           key={code}
           type="button"
           aria-pressed={lang === code}
           onClick={() => setLang(code)}
-          className={`rounded-full px-3 py-1.5 uppercase tracking-widest transition-colors ${
-            lang === code ? 'bg-white/20 text-white' : 'text-white/60 hover:text-white'
+          className={`rounded-full px-2.5 py-1.5 uppercase tracking-widest transition-colors ${
+            lang === code ? 'bg-white text-black' : 'text-white/70 hover:text-white'
           }`}
         >
           {code}
@@ -80,73 +110,102 @@ function Nav() {
 
   useEffect(() => setOpen(false), [pathname])
 
-  const linkClass = ({ isActive }) =>
-    `rounded-full px-3.5 py-2 text-sm transition-colors ${
-      isActive ? 'bg-white/15 text-white' : 'text-white/80 hover:text-white'
-    }`
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e) => e.key === 'Escape' && setOpen(false)
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [open])
 
   return (
-    <header className="sticky top-0 z-40 px-4 pt-4 lg:px-6">
-      <div className="liquid-glass-strong mx-auto flex max-w-7xl items-center justify-between gap-4 rounded-full py-2 pl-5 pr-2">
-        <Link to="/" className="text-xl font-semibold tracking-[0.35em] text-white">
-          ASPECTO
-        </Link>
+    <motion.header
+      className="pointer-events-none fixed inset-x-0 top-0 z-40 p-4 md:px-8 md:py-6"
+      initial={{ opacity: 0, y: -16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, ease: EASE }}
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div className="pointer-events-auto flex items-center gap-2 md:gap-3">
+          <Link to="/" className="flex items-center gap-2.5 text-white" aria-label="Aspecto">
+            <LogoMark className="h-8 w-8" />
+            <span className="hidden text-sm font-medium tracking-[0.3em] md:block">ASPECTO</span>
+          </Link>
 
-        <nav className="hidden items-center gap-1 lg:flex" aria-label="Main">
-          {LINKS.map(([to, key]) => (
-            <NavLink key={to} to={to} className={linkClass}>
-              {t.nav[key]}
-            </NavLink>
-          ))}
-        </nav>
+          <button
+            type="button"
+            aria-expanded={open}
+            aria-controls="site-menu"
+            onClick={() => setOpen((v) => !v)}
+            className="flex items-center gap-2 rounded-full bg-white py-1 pl-1 pr-3.5 text-[11px] font-medium text-black transition-transform hover:scale-105 active:scale-95"
+          >
+            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-black text-white md:h-8 md:w-8">
+              <Plus
+                size={12}
+                strokeWidth={3}
+                className={`transition-transform duration-300 ${open ? 'rotate-45' : ''}`}
+              />
+            </span>
+            {t.nav.menu}
+          </button>
 
-        <div className="flex items-center gap-2">
+          <div className="hidden items-center gap-4 rounded-full bg-black/40 px-4 py-2.5 text-[11px] text-white/80 backdrop-blur-md md:flex">
+            {t.brand.tags.map((tag) => (
+              <span key={tag}>{tag}</span>
+            ))}
+          </div>
+        </div>
+
+        <div className="pointer-events-auto flex items-center gap-2">
           <LangToggle />
           <button
             type="button"
             onClick={openContact}
-            className="liquid-glass hidden items-center gap-2 rounded-full py-1.5 pl-4 pr-1.5 text-sm transition-transform hover:scale-105 active:scale-95 sm:flex"
+            aria-label={t.nav.cta}
+            className="flex items-center gap-2.5 rounded-full bg-black/40 p-1 text-[11px] text-white backdrop-blur-md transition-transform hover:scale-105 active:scale-95 md:pr-4"
           >
-            {t.nav.cta}
-            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/15">
-              <Sparkles className="h-3.5 w-3.5" />
+            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white md:h-8 md:w-8">
+              <svg viewBox="0 0 12 12" className="h-3 w-3 text-black" fill="currentColor" aria-hidden="true">
+                <circle cx="3" cy="3" r="1.5" />
+                <circle cx="9" cy="3" r="1.5" />
+                <circle cx="3" cy="9" r="1.5" />
+                <circle cx="9" cy="9" r="1.5" />
+              </svg>
             </span>
-          </button>
-          <button
-            type="button"
-            aria-label={t.nav.menu}
-            aria-expanded={open}
-            onClick={() => setOpen((v) => !v)}
-            className="liquid-glass flex h-10 w-10 items-center justify-center rounded-full transition-transform hover:scale-105 lg:hidden"
-          >
-            {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+            <span className="hidden md:block">{t.nav.cta}</span>
           </button>
         </div>
       </div>
 
-      {open && (
-        <nav
-          className="liquid-glass-strong fade-up mx-auto mt-2 flex max-w-7xl flex-col gap-1 rounded-3xl p-3 lg:hidden"
-          aria-label="Mobile"
-        >
-          {LINKS.map(([to, key]) => (
-            <NavLink key={to} to={to} className={linkClass}>
-              {t.nav[key]}
-            </NavLink>
-          ))}
-          <button
-            type="button"
-            onClick={() => {
-              setOpen(false)
-              openContact()
-            }}
-            className="rounded-full bg-white/15 px-3.5 py-2 text-left text-sm sm:hidden"
+      <AnimatePresence>
+        {open && (
+          <motion.nav
+            id="site-menu"
+            aria-label="Main"
+            className="liquid-glass-strong pointer-events-auto mt-3 flex w-full max-w-sm flex-col rounded-3xl bg-black/50 p-3"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.35, ease: EASE }}
           >
-            {t.nav.cta}
-          </button>
-        </nav>
-      )}
-    </header>
+            {LINKS.map(([to, key], i) => (
+              <NavLink
+                key={to}
+                to={to}
+                end
+                className={({ isActive }) =>
+                  `flex items-baseline gap-4 rounded-2xl px-4 py-2.5 text-2xl font-light tracking-[-0.02em] transition-colors ${
+                    isActive ? 'bg-white/10 text-white' : 'text-white/70 hover:text-white'
+                  }`
+                }
+              >
+                <span className="w-5 text-[11px] text-white/40">{String(i + 1).padStart(2, '0')}</span>
+                {t.nav[key]}
+              </NavLink>
+            ))}
+          </motion.nav>
+        )}
+      </AnimatePresence>
+    </motion.header>
   )
 }
 
@@ -156,8 +215,11 @@ function Footer({ className = '' }) {
     <footer className={`px-4 pb-4 pt-16 lg:px-6 lg:pb-6 ${className}`}>
       <div className="liquid-glass-strong mx-auto grid max-w-7xl gap-10 rounded-3xl p-8 sm:grid-cols-2 lg:grid-cols-4 lg:p-10">
         <div>
-          <p className="text-xl font-semibold tracking-[0.35em]">ASPECTO</p>
-          <p className="serif-italic mt-3 text-lg">{t.footer.tagline}</p>
+          <p className="flex items-center gap-2.5 text-sm font-medium tracking-[0.3em]">
+            <LogoMark /> ASPECTO
+          </p>
+          <p className="mt-4 text-sm text-white/80">{t.brand.line}</p>
+          <p className="mt-2 text-sm text-white/50">{t.footer.tagline}</p>
         </div>
         <div className="text-sm text-white/60">
           <p className="mb-3 text-xs uppercase tracking-widest text-white/50">{t.nav.contact}</p>
@@ -173,9 +235,6 @@ function Footer({ className = '' }) {
         </div>
         <nav className="flex flex-col gap-1.5 text-sm" aria-label="Footer">
           <p className="mb-1.5 text-xs uppercase tracking-widest text-white/50">{t.nav.menu}</p>
-          <Link to="/" className="text-white/80 transition-colors hover:text-white">
-            {t.nav.home}
-          </Link>
           {LINKS.map(([to, key]) => (
             <Link key={to} to={to} className="text-white/80 transition-colors hover:text-white">
               {t.nav[key]}
@@ -224,9 +283,12 @@ export default function Layout() {
 /** Shared top-of-page header for the inner pages. */
 export function PageHeader({ label, title, intro }) {
   return (
-    <section className="mx-auto max-w-7xl px-4 pb-10 pt-16 lg:px-6 lg:pt-24">
-      <p className="fade-up text-xs uppercase tracking-widest text-white/50">{label}</p>
-      <h1 className="fade-up mt-4 max-w-4xl text-5xl leading-[1.05] tracking-[-0.05em] sm:text-6xl lg:text-7xl">
+    <section className="mx-auto max-w-7xl px-4 pb-10 pt-32 lg:px-6 lg:pt-40">
+      <p className="fade-up flex items-center gap-2.5 text-[13px] text-white/60">
+        <span className="h-2 w-2 rounded-full bg-white" />
+        {label}
+      </p>
+      <h1 className="fade-up mt-5 max-w-4xl text-5xl leading-none sm:text-6xl lg:text-7xl">
         {title[0]} <em>{title[1]}</em>
       </h1>
       {intro && (

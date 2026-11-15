@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { ArrowUpRight, ChevronDown, MapPin } from 'lucide-react'
+import { ArrowUpRight, Check, ChevronDown, MapPin } from 'lucide-react'
 import { useLang } from '../i18n'
 import { ORIGINAL_SITE } from '../content'
 import { ContactForm, useContactModal } from '../components/Contact'
+import { FleetCards, Workflow } from '../components/Industry'
 import { PageHeader } from '../components/Layout'
 import ServiceExplorer from '../components/ServiceExplorer'
 import { CtaBand, NewsCards, Newsletter, PillButton, Section, TeamGrid } from '../components/Sections'
@@ -47,11 +48,61 @@ export function About() {
       </Section>
 
       <Section>
+        <Reveal>
+          <Title parts={t.strengths.title} className="text-4xl lg:text-6xl" />
+          <p className="mt-5 max-w-3xl text-xl font-light leading-snug text-white/70">{t.strengths.lead}</p>
+        </Reveal>
+        <div className="mt-10 grid gap-4 lg:grid-cols-2">
+          <Reveal>
+            <Glass strong className="h-full rounded-3xl p-7">
+              <CheckList items={t.strengths.items} />
+            </Glass>
+          </Reveal>
+          <Reveal delay={100}>
+            <Glass className="h-full rounded-3xl p-7">
+              <h3 className="mb-4 text-xs uppercase tracking-widest text-white/50">{t.strengths.chainTitle}</h3>
+              <CheckList items={t.strengths.chain} />
+            </Glass>
+          </Reveal>
+        </div>
+      </Section>
+
+      <Section>
+        <Reveal>
+          <Glass strong className="rounded-[2.5rem] p-8 lg:grid lg:grid-cols-[2fr_3fr] lg:gap-14 lg:p-12">
+            <div>
+              <Label>{t.science.label}</Label>
+              <h2 className="mt-4 text-4xl leading-none lg:text-5xl">{t.science.name}</h2>
+              <p className="mt-4 text-sm text-white/60">{t.science.role}</p>
+            </div>
+            <div className="mt-6 flex flex-col gap-4 text-base leading-relaxed text-white/80 lg:mt-0">
+              {t.science.paragraphs.map((p) => (
+                <p key={p}>{p}</p>
+              ))}
+            </div>
+          </Glass>
+        </Reveal>
+      </Section>
+
+      <Section>
         <TeamGrid />
       </Section>
 
       <CtaBand />
     </>
+  )
+}
+
+function CheckList({ items }) {
+  return (
+    <ul className="flex flex-col gap-3 text-sm leading-relaxed text-white/85">
+      {items.map((item) => (
+        <li key={item} className="flex gap-2.5">
+          <Check className="mt-1 h-3.5 w-3.5 shrink-0 text-white/50" />
+          {item}
+        </li>
+      ))}
+    </ul>
   )
 }
 
@@ -64,6 +115,49 @@ export function Services() {
       <Section className="!pt-6">
         <Reveal>
           <ServiceExplorer detailed />
+        </Reveal>
+      </Section>
+
+      <Section>
+        <Reveal>
+          <Title parts={t.products.title} className="text-4xl lg:text-6xl" />
+        </Reveal>
+        <div className="mt-10 grid gap-4 lg:grid-cols-2">
+          {t.products.groups.map((g, i) => (
+            <Reveal key={g.title} delay={i * 100}>
+              <Glass strong={i === 0} className="h-full rounded-3xl p-7">
+                <h3 className="mb-5 text-xl">{g.title}</h3>
+                <CheckList items={g.items} />
+                {g.note && <p className="mt-6 text-sm text-white/60">{g.note}</p>}
+              </Glass>
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+
+      <Section>
+        <Reveal>
+          <Title parts={t.auvBenefits.title} stacked className="text-4xl leading-[1.05] lg:text-6xl" />
+        </Reveal>
+        <div className="mt-10 grid gap-4 lg:grid-cols-[2fr_3fr]">
+          <Reveal>
+            <Glass strong className="h-full rounded-3xl p-7">
+              <CheckList items={t.auvBenefits.items} />
+            </Glass>
+          </Reveal>
+          <Reveal delay={100}>
+            <FleetCards />
+          </Reveal>
+        </div>
+      </Section>
+
+      <Section>
+        <Reveal>
+          <Title parts={t.workflow.title} stacked className="text-4xl leading-[1.05] lg:text-6xl" />
+          <p className="mt-4 text-sm text-white/60">{t.workflow.total}</p>
+        </Reveal>
+        <Reveal delay={100} className="mt-8">
+          <Workflow />
         </Reveal>
       </Section>
       <CtaBand title={s.ctaTitle} text={s.ctaText} />

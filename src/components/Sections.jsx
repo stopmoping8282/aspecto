@@ -111,9 +111,9 @@ export function TeamGrid() {
         <Title parts={t.teamSection.title} className="text-4xl lg:text-5xl" />
         <p className="mt-5 max-w-3xl text-base leading-relaxed text-white/80">{t.teamSection.text}</p>
       </Reveal>
-      <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {team.map((p, i) => (
-          <Reveal key={p.email} delay={i * 80}>
+          <Reveal key={p.name} delay={(i % 3) * 80}>
             <Glass tilt className="flex h-full flex-col rounded-3xl p-6">
               <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-sm">
                 {p.name
@@ -124,20 +124,22 @@ export function TeamGrid() {
               </span>
               <h3 className="mt-5 text-xl">{p.name}</h3>
               <p className="serif-italic mt-1 text-base">{p.role[lang]}</p>
-              <div className="mt-6 flex flex-col gap-2 text-sm text-white/80">
-                <a
-                  href={`tel:+47${p.phone.replace(/\s/g, '')}`}
-                  className="inline-flex items-center gap-2 transition-colors hover:text-white"
-                >
-                  <Phone className="h-3.5 w-3.5" /> {p.phone}
-                </a>
-                <a
-                  href={`mailto:${p.email}`}
-                  className="inline-flex items-center gap-2 transition-colors hover:text-white"
-                >
-                  <Mail className="h-3.5 w-3.5" /> {p.email}
-                </a>
-              </div>
+              {p.email && (
+                <div className="mt-6 flex flex-col gap-2 text-sm text-white/80">
+                  <a
+                    href={`tel:+47${p.phone.replace(/\s/g, '')}`}
+                    className="inline-flex items-center gap-2 transition-colors hover:text-white"
+                  >
+                    <Phone className="h-3.5 w-3.5" /> {p.phone}
+                  </a>
+                  <a
+                    href={`mailto:${p.email}`}
+                    className="inline-flex items-center gap-2 transition-colors hover:text-white"
+                  >
+                    <Mail className="h-3.5 w-3.5" /> {p.email}
+                  </a>
+                </div>
+              )}
             </Glass>
           </Reveal>
         ))}
@@ -157,7 +159,7 @@ export function CtaBand({ title, text }) {
           <Label>{t.cta.label}</Label>
           <Title
             parts={title ?? t.cta.title}
-            className="mx-auto mt-4 max-w-3xl text-5xl leading-[1.05] tracking-[-0.05em] lg:text-7xl"
+            className="mx-auto mt-4 max-w-3xl text-5xl leading-[1.05] lg:text-7xl"
           />
           <p className="mx-auto mt-5 max-w-xl text-base text-white/80">{text ?? t.cta.text}</p>
           <PillButton onClick={openContact} className="mt-8">

@@ -1,3 +1,5 @@
+import { presentation } from './content-presentation'
+
 // All site text, in Norwegian (no) and English (en).
 // Norwegian text is taken from aspecto.no; English is a translation.
 
@@ -6,12 +8,7 @@ export const VIDEO_SRC =
 
 export const ORIGINAL_SITE = 'https://www.aspecto.no'
 
-export const team = [
-  { name: 'Fredrik Nordøy', role: { no: 'Daglig leder', en: 'CEO' }, phone: '90 75 60 90', email: 'fredrik@aspecto.no' },
-  { name: 'Caroline Navjord', role: { no: 'Eier og administrasjonsleder', en: 'Owner and Head of Administration' }, phone: '41 07 91 05', email: 'caroline@aspecto.no' },
-  { name: 'Kristin Galtung', role: { no: 'Marinbiolog', en: 'Marine Biologist' }, phone: '46 81 22 44', email: 'kristin@aspecto.no' },
-  { name: 'Kelsey Barnhill, PhD', role: { no: 'Head of R&D', en: 'Head of R&D' }, phone: '48 90 39 69', email: 'kelsey@aspecto.no' },
-]
+export { team, fleet, workflowDays } from './content-presentation'
 
 const no = {
   nav: { home: 'Hjem', about: 'Om oss', services: 'Tjenester', news: 'Nyheter', careers: 'Karriere', contact: 'Kontakt', menu: 'Meny', cta: 'Bestill konsultasjon' },
@@ -333,4 +330,7 @@ const en = {
   },
 }
 
-export const content = { no, en }
+export const content = {
+  no: { ...no, ...presentation.no },
+  en: { ...en, ...presentation.en },
+}
