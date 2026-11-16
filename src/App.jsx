@@ -9,7 +9,7 @@ export default function App() {
   return (
     <LangProvider>
       <ContactProvider>
-        <BrowserRouter>
+        <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '')}>
           <Routes>
             <Route element={<Layout />}>
               <Route index element={<Home />} />

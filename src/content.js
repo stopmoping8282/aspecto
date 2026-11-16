@@ -6,6 +6,9 @@ import { presentation } from './content-presentation'
 export const VIDEO_SRC =
   'https://video.wixstatic.com/video/e7a17d_26de15e23f0f4741894f32dde6e1a144/1080p/mp4/file.mp4'
 
+// Prefixes a file in public/ with the folder the site is served from (e.g. /aspecto/ on GitHub Pages)
+export const asset = (path) => import.meta.env.BASE_URL + path.replace(/^\//, '')
+
 export const ORIGINAL_SITE = 'https://www.aspecto.no'
 
 export { team, fleet, workflowDays } from './content-presentation'

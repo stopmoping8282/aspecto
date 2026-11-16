@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { ArrowRight, BarChart3, Check, ClipboardCheck, Database, Map, Send, Ship, X } from 'lucide-react'
 import { useLang } from '../i18n'
-import { fleet, workflowDays } from '../content'
+import { asset, fleet, workflowDays } from '../content'
 import { useContactModal } from './Contact'
 import { EASE } from './Layout'
 
@@ -153,7 +153,7 @@ export default function IndustryModal({ industry, onChange, onClose }) {
               transition={{ duration: 0.6, ease: EASE }}
             >
               <img
-                src={industry === 'aqua' ? '/img/crew-auv.jpg' : '/img/seabed-lights.jpg'}
+                src={asset(industry === 'aqua' ? '/img/crew-auv.jpg' : '/img/seabed-lights.jpg')}
                 alt={industry === 'aqua' ? t.images.crew : t.images.seabed}
                 className="mt-5 h-40 w-full rounded-2xl object-cover sm:h-52"
               />

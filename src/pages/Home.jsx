@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react'
 import { motion } from 'motion/react'
 import { ArrowDown, Check, LifeBuoy, Radar, Waves } from 'lucide-react'
 import { useLang } from '../i18n'
+import { asset } from '../content'
 import DepthMeter from '../components/DepthMeter'
 import { DepthChart } from '../components/Graphics'
 import IndustryModal, { FleetCards } from '../components/Industry'
@@ -114,7 +115,7 @@ export default function Home() {
               <Title parts={t.about.title} className="mt-4 text-5xl leading-none lg:text-7xl" />
               <p className="mt-6 text-2xl font-light leading-snug text-black/70">{t.about.lead}</p>
               <img
-                src="/img/crew-auv.jpg"
+                src={asset('/img/crew-auv.jpg')}
                 alt={t.images.crew}
                 loading="lazy"
                 className="mt-8 aspect-[16/10] w-full rounded-3xl object-cover"
@@ -136,7 +137,7 @@ export default function Home() {
               {[Waves, Radar, LifeBuoy].map((Icon, i) => (
                 <Glass key={i} tilt className="rounded-3xl p-6">
                   <img
-                    src={SURVEY_IMAGES[i][0]}
+                    src={asset(SURVEY_IMAGES[i][0])}
                     alt={t.images[SURVEY_IMAGES[i][1]]}
                     loading="lazy"
                     className="mb-6 aspect-[16/10] w-full rounded-2xl object-cover"
@@ -161,7 +162,7 @@ export default function Home() {
           <Reveal delay={100}>
             <div className="mb-4 grid gap-4 lg:grid-cols-2">
               <img
-                src="/img/auv.jpg"
+                src={asset('/img/auv.jpg')}
                 alt={t.images.auv}
                 loading="lazy"
                 className="h-full max-h-96 w-full rounded-3xl object-cover"

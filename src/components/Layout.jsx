@@ -3,7 +3,7 @@ import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { motion } from 'motion/react'
 import { ArrowRight, Mail } from 'lucide-react'
 import { useLang } from '../i18n'
-import { ORIGINAL_SITE, VIDEO_SRC } from '../content'
+import { asset, ORIGINAL_SITE, VIDEO_SRC } from '../content'
 import { useContactModal } from './Contact'
 
 export const EASE = [0.16, 1, 0.3, 1]
@@ -65,7 +65,7 @@ function Background({ home }) {
 }
 
 export function Logo({ className = 'h-8' }) {
-  return <img src="/logo.svg" alt="Aspecto" className={`w-auto ${className}`} />
+  return <img src={asset('logo.svg')} alt="Aspecto" className={`w-auto ${className}`} />
 }
 
 function LangToggle() {
@@ -247,7 +247,7 @@ export function PageHeader({ label, title, intro, image, imageAlt = '' }) {
         </div>
         {image && (
           <img
-            src={image}
+            src={asset(image)}
             alt={imageAlt}
             className="fade-up aspect-[4/3] w-full rounded-3xl object-cover"
             style={{ animationDelay: '200ms' }}
