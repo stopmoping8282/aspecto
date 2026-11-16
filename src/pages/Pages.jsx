@@ -3,6 +3,7 @@ import { ArrowUpRight, Check, ChevronDown, MapPin } from 'lucide-react'
 import { useLang } from '../i18n'
 import { ORIGINAL_SITE } from '../content'
 import { ContactForm, useContactModal } from '../components/Contact'
+import { TransectDiagram } from '../components/Graphics'
 import { FleetCards, Workflow } from '../components/Industry'
 import { PageHeader } from '../components/Layout'
 import ServiceExplorer from '../components/ServiceExplorer'
@@ -14,7 +15,7 @@ export function About() {
   const a = t.aboutPage
   return (
     <>
-      <PageHeader label={a.label} title={a.title} intro={a.intro} />
+      <PageHeader label={a.label} title={a.title} intro={a.intro} image="/img/coast.jpg" imageAlt={t.images.coast} />
 
       <Section className="!pt-6">
         <div className="grid gap-4 lg:grid-cols-3">
@@ -23,7 +24,7 @@ export function About() {
               <Glass tilt className="h-full rounded-3xl p-7">
                 <span className="serif-italic text-3xl">{String(i + 1).padStart(2, '0')}</span>
                 <h2 className="mt-5 text-2xl">{b.title}</h2>
-                <p className="mt-4 text-sm leading-relaxed text-white/80">{b.text}</p>
+                <p className="mt-4 text-sm leading-relaxed text-black/80">{b.text}</p>
               </Glass>
             </Reveal>
           ))}
@@ -33,14 +34,14 @@ export function About() {
       <Section>
         <Reveal>
           <Title parts={a.dataTitle} className="text-4xl lg:text-6xl" />
-          <p className="mt-5 max-w-3xl text-base leading-relaxed text-white/80">{a.dataText}</p>
+          <p className="mt-5 max-w-3xl text-base leading-relaxed text-black/80">{a.dataText}</p>
         </Reveal>
         <Reveal delay={100}>
           <div className="liquid-glass mt-10 grid gap-4 rounded-[2.5rem] p-4 md:grid-cols-3">
             {a.pillars.map((p) => (
               <Glass key={p.title} className="rounded-3xl p-6">
                 <h3 className="text-xl">{p.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-white/60">{p.text}</p>
+                <p className="mt-3 text-sm leading-relaxed text-black/60">{p.text}</p>
               </Glass>
             ))}
           </div>
@@ -50,7 +51,7 @@ export function About() {
       <Section>
         <Reveal>
           <Title parts={t.strengths.title} className="text-4xl lg:text-6xl" />
-          <p className="mt-5 max-w-3xl text-xl font-light leading-snug text-white/70">{t.strengths.lead}</p>
+          <p className="mt-5 max-w-3xl text-xl font-light leading-snug text-black/70">{t.strengths.lead}</p>
         </Reveal>
         <div className="mt-10 grid gap-4 lg:grid-cols-2">
           <Reveal>
@@ -60,7 +61,7 @@ export function About() {
           </Reveal>
           <Reveal delay={100}>
             <Glass className="h-full rounded-3xl p-7">
-              <h3 className="mb-4 text-xs uppercase tracking-widest text-white/50">{t.strengths.chainTitle}</h3>
+              <h3 className="mb-4 text-xs uppercase tracking-widest text-black/50">{t.strengths.chainTitle}</h3>
               <CheckList items={t.strengths.chain} />
             </Glass>
           </Reveal>
@@ -73,9 +74,9 @@ export function About() {
             <div>
               <Label>{t.science.label}</Label>
               <h2 className="mt-4 text-4xl leading-none lg:text-5xl">{t.science.name}</h2>
-              <p className="mt-4 text-sm text-white/60">{t.science.role}</p>
+              <p className="mt-4 text-sm text-black/60">{t.science.role}</p>
             </div>
-            <div className="mt-6 flex flex-col gap-4 text-base leading-relaxed text-white/80 lg:mt-0">
+            <div className="mt-6 flex flex-col gap-4 text-base leading-relaxed text-black/80 lg:mt-0">
               {t.science.paragraphs.map((p) => (
                 <p key={p}>{p}</p>
               ))}
@@ -95,10 +96,10 @@ export function About() {
 
 function CheckList({ items }) {
   return (
-    <ul className="flex flex-col gap-3 text-sm leading-relaxed text-white/85">
+    <ul className="flex flex-col gap-3 text-sm leading-relaxed text-black/85">
       {items.map((item) => (
         <li key={item} className="flex gap-2.5">
-          <Check className="mt-1 h-3.5 w-3.5 shrink-0 text-white/50" />
+          <Check className="mt-1 h-3.5 w-3.5 shrink-0 text-black/50" />
           {item}
         </li>
       ))}
@@ -111,7 +112,7 @@ export function Services() {
   const s = t.servicesPage
   return (
     <>
-      <PageHeader label={s.label} title={s.title} intro={s.intro} />
+      <PageHeader label={s.label} title={s.title} intro={s.intro} image="/img/operator.jpg" imageAlt={t.images.operator} />
       <Section className="!pt-6">
         <Reveal>
           <ServiceExplorer detailed />
@@ -128,7 +129,7 @@ export function Services() {
               <Glass strong={i === 0} className="h-full rounded-3xl p-7">
                 <h3 className="mb-5 text-xl">{g.title}</h3>
                 <CheckList items={g.items} />
-                {g.note && <p className="mt-6 text-sm text-white/60">{g.note}</p>}
+                {g.note && <p className="mt-6 text-sm text-black/60">{g.note}</p>}
               </Glass>
             </Reveal>
           ))}
@@ -142,6 +143,7 @@ export function Services() {
         <div className="mt-10 grid gap-4 lg:grid-cols-[2fr_3fr]">
           <Reveal>
             <Glass strong className="h-full rounded-3xl p-7">
+              <TransectDiagram className="mb-6" />
               <CheckList items={t.auvBenefits.items} />
             </Glass>
           </Reveal>
@@ -154,7 +156,7 @@ export function Services() {
       <Section>
         <Reveal>
           <Title parts={t.workflow.title} stacked className="text-4xl leading-[1.05] lg:text-6xl" />
-          <p className="mt-4 text-sm text-white/60">{t.workflow.total}</p>
+          <p className="mt-4 text-sm text-black/60">{t.workflow.total}</p>
         </Reveal>
         <Reveal delay={100} className="mt-8">
           <Workflow />
@@ -189,14 +191,14 @@ export function Careers() {
 
   return (
     <>
-      <PageHeader label={c.label} title={c.title} intro={c.intro} />
+      <PageHeader label={c.label} title={c.title} intro={c.intro} image="/img/crew-deck.jpg" imageAlt={t.images.crew} />
 
       <Section className="!pt-6">
         <Reveal>
           <Glass strong className="rounded-[2.5rem] p-8 lg:flex lg:items-end lg:justify-between lg:gap-10 lg:p-12">
             <div>
               <Title parts={c.subTitle} stacked className="text-4xl leading-[1.08] lg:text-5xl" />
-              <p className="mt-5 max-w-xl text-base leading-relaxed text-white/80">{c.subText}</p>
+              <p className="mt-5 max-w-xl text-base leading-relaxed text-black/80">{c.subText}</p>
             </div>
             <PillButton onClick={openContact} className="mt-7 shrink-0 lg:mt-0">
               {c.apply}
@@ -225,7 +227,7 @@ export function Careers() {
                     >
                       <span className="serif-italic w-10 text-3xl">{String(i + 1).padStart(2, '0')}</span>
                       <span className="flex-1 text-2xl tracking-[-0.03em]">{job.title}</span>
-                      <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10">
+                      <span className="flex h-9 w-9 items-center justify-center rounded-full bg-black/10">
                         <ChevronDown
                           className={`h-4 w-4 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
                         />
@@ -234,15 +236,15 @@ export function Careers() {
                   </h3>
                   {isOpen && (
                     <div id={`job-${i}`} className="fade-up px-6 pb-6 sm:pl-[5.25rem]">
-                      <p className="max-w-2xl text-base leading-relaxed text-white/80">{job.text}</p>
-                      <p className="mt-4 flex max-w-2xl items-start gap-2 text-sm text-white/60">
+                      <p className="max-w-2xl text-base leading-relaxed text-black/80">{job.text}</p>
+                      <p className="mt-4 flex max-w-2xl items-start gap-2 text-sm text-black/60">
                         <MapPin className="mt-0.5 h-4 w-4 shrink-0" /> {c.location}
                       </p>
                       <a
                         href={`${ORIGINAL_SITE}/karriere`}
                         target="_blank"
                         rel="noreferrer"
-                        className="mt-5 inline-flex items-center gap-2 text-xs uppercase tracking-widest text-white transition-colors hover:text-white/80"
+                        className="mt-5 inline-flex items-center gap-2 text-xs uppercase tracking-widest text-black transition-colors hover:text-black/80"
                       >
                         {c.more} <ArrowUpRight className="h-3.5 w-3.5" />
                       </a>
@@ -263,7 +265,7 @@ export function Contact() {
   const c = t.contact
   return (
     <>
-      <PageHeader label={c.label} title={c.title} intro={c.text} />
+      <PageHeader label={c.label} title={c.title} intro={c.text} image="/img/vessel-top.jpg" imageAlt={t.images.vessel} />
 
       <Section className="!pt-6">
         <Reveal>
@@ -271,14 +273,14 @@ export function Contact() {
             <div className="mb-8 lg:mb-0">
               <Label>{c.label}</Label>
               <Title parts={c.modalTitle} stacked className="mt-4 text-4xl leading-[1.08] lg:text-5xl" />
-              <p className="mt-5 text-sm leading-relaxed text-white/60">{c.formHint}</p>
-              <div className="mt-8 text-sm text-white/80">
+              <p className="mt-5 text-sm leading-relaxed text-black/60">{c.formHint}</p>
+              <div className="mt-8 text-sm text-black/80">
                 {t.footer.address.map((line) => (
                   <p key={line}>{line}</p>
                 ))}
                 <a
                   href="mailto:post@aspecto.no"
-                  className="mt-3 inline-block text-white transition-colors hover:text-white/80"
+                  className="mt-3 inline-block text-black transition-colors hover:text-black/80"
                 >
                   post@aspecto.no
                 </a>

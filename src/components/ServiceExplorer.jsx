@@ -32,15 +32,15 @@ export default function ServiceExplorer({ detailed = false }) {
               strong={selected}
               onClick={() => setActive(i)}
               className={`flex items-center gap-4 rounded-3xl p-5 text-left transition-all duration-300 hover:scale-[1.02] ${
-                selected ? 'text-white' : 'text-white/60 hover:text-white'
+                selected ? 'text-black' : 'text-black/60 hover:text-black'
               }`}
             >
               <span className="serif-italic w-8 text-3xl">{i + 1}</span>
               <span className="flex-1">
-                <span className="block text-xs uppercase tracking-widest text-white/50">{s.short}</span>
+                <span className="block text-xs uppercase tracking-widest text-black/50">{s.short}</span>
                 <span className="mt-1 block text-base leading-snug">{s.title}</span>
               </span>
-              <IconDot className={selected ? 'bg-white/20' : ''}>
+              <IconDot className={selected ? 'bg-black/20' : ''}>
                 <Icon className="h-4 w-4" />
               </IconDot>
             </Glass>
@@ -57,27 +57,27 @@ export default function ServiceExplorer({ detailed = false }) {
       >
         {/* key restarts the fade animation each time the service changes */}
         <div key={active} className="fade-up">
-          <p className="text-xs uppercase tracking-widest text-white/50">
+          <p className="text-xs uppercase tracking-widest text-black/50">
             {String(active + 1).padStart(2, '0')} / {String(t.services.length).padStart(2, '0')}
           </p>
           <h3 className="mt-3 text-3xl leading-tight lg:text-4xl">
             {detailed ? service.pageTitle : service.title}
           </h3>
-          <p className="mt-5 text-sm leading-relaxed text-white/80 lg:text-base">{service.text}</p>
+          <p className="mt-5 text-sm leading-relaxed text-black/80 lg:text-base">{service.text}</p>
 
           {detailed ? (
             <dl className="mt-8 grid gap-4 sm:grid-cols-2">
               {service.items.map(([title, text]) => (
                 <div key={title} className="liquid-glass rounded-3xl p-5">
-                  <dt className="text-sm font-medium text-white">{title}</dt>
-                  <dd className="mt-2 text-sm leading-relaxed text-white/60">{text}</dd>
+                  <dt className="text-sm font-medium text-black">{title}</dt>
+                  <dd className="mt-2 text-sm leading-relaxed text-black/60">{text}</dd>
                 </div>
               ))}
             </dl>
           ) : (
             <ul className="mt-7 flex flex-wrap gap-2">
               {service.items.map(([title]) => (
-                <li key={title} className="liquid-glass rounded-full px-4 py-2 text-xs text-white/80">
+                <li key={title} className="liquid-glass rounded-full px-4 py-2 text-xs text-black/80">
                   {title}
                 </li>
               ))}

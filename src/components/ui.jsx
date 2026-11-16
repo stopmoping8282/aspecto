@@ -78,14 +78,14 @@ export function Title({ as: Tag = 'h2', parts, className = '', stacked = false }
 
 export function Label({ children, className = '' }) {
   return (
-    <p className={`text-xs uppercase tracking-widest text-white/50 ${className}`}>{children}</p>
+    <p className={`text-xs uppercase tracking-widest text-black/50 ${className}`}>{children}</p>
   )
 }
 
 export function IconDot({ children, className = '' }) {
   return (
     <span
-      className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/10 ${className}`}
+      className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-black/10 ${className}`}
     >
       {children}
     </span>

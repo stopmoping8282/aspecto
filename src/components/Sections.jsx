@@ -16,11 +16,11 @@ export function Section({ className = '', children, ...rest }) {
 
 /** Pill button in the reference style: label plus a round icon. */
 export function PillButton({ children, icon: Icon = ArrowRight, onClick, to, className = '' }) {
-  const cls = `liquid-glass-strong inline-flex items-center gap-3 rounded-full py-2 pl-5 pr-2 text-sm text-white transition-transform hover:scale-105 active:scale-95 ${className}`
+  const cls = `liquid-glass-strong inline-flex items-center gap-3 rounded-full py-2 pl-5 pr-2 text-sm text-black transition-transform hover:scale-105 active:scale-95 ${className}`
   const inner = (
     <>
       {children}
-      <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/15">
+      <span className="flex h-7 w-7 items-center justify-center rounded-full bg-black/15">
         <Icon className="h-3.5 w-3.5" />
       </span>
     </>
@@ -53,7 +53,7 @@ export function NewsCards() {
             <span className="serif-italic text-3xl">{String(i + 1).padStart(2, '0')}</span>
             <span>
               <span className="block text-lg leading-snug">{item.title}</span>
-              <span className="mt-4 inline-flex items-center gap-2 text-xs uppercase tracking-widest text-white/60">
+              <span className="mt-4 inline-flex items-center gap-2 text-xs uppercase tracking-widest text-black/60">
                 {t.news.read} <ArrowUpRight className="h-3.5 w-3.5" />
               </span>
             </span>
@@ -70,7 +70,7 @@ export function Newsletter() {
   return (
     <Reveal>
       <Glass strong className="rounded-[2.5rem] p-7 lg:flex lg:items-center lg:gap-10 lg:p-10">
-        <p className="max-w-xl text-base leading-relaxed text-white/80">{t.news.newsletter}</p>
+        <p className="max-w-xl text-base leading-relaxed text-black/80">{t.news.newsletter}</p>
         {done ? (
           <p className="fade-up mt-5 text-sm lg:ml-auto lg:mt-0" role="status">
             {t.news.subscribed}
@@ -92,7 +92,7 @@ export function Newsletter() {
             />
             <button
               type="submit"
-              className="shrink-0 rounded-full bg-white/15 px-5 text-sm transition-transform hover:scale-105 active:scale-95"
+              className="shrink-0 rounded-full bg-black/15 px-5 text-sm transition-transform hover:scale-105 active:scale-95"
             >
               {t.news.subscribe}
             </button>
@@ -109,13 +109,13 @@ export function TeamGrid() {
     <>
       <Reveal>
         <Title parts={t.teamSection.title} className="text-4xl lg:text-5xl" />
-        <p className="mt-5 max-w-3xl text-base leading-relaxed text-white/80">{t.teamSection.text}</p>
+        <p className="mt-5 max-w-3xl text-base leading-relaxed text-black/80">{t.teamSection.text}</p>
       </Reveal>
       <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {team.map((p, i) => (
           <Reveal key={p.name} delay={(i % 3) * 80}>
             <Glass tilt className="flex h-full flex-col rounded-3xl p-6">
-              <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-sm">
+              <span className="flex h-12 w-12 items-center justify-center rounded-full bg-black/10 text-sm">
                 {p.name
                   .replace(', PhD', '')
                   .split(' ')
@@ -125,16 +125,16 @@ export function TeamGrid() {
               <h3 className="mt-5 text-xl">{p.name}</h3>
               <p className="serif-italic mt-1 text-base">{p.role[lang]}</p>
               {p.email && (
-                <div className="mt-6 flex flex-col gap-2 text-sm text-white/80">
+                <div className="mt-6 flex flex-col gap-2 text-sm text-black/80">
                   <a
                     href={`tel:+47${p.phone.replace(/\s/g, '')}`}
-                    className="inline-flex items-center gap-2 transition-colors hover:text-white"
+                    className="inline-flex items-center gap-2 transition-colors hover:text-black"
                   >
                     <Phone className="h-3.5 w-3.5" /> {p.phone}
                   </a>
                   <a
                     href={`mailto:${p.email}`}
-                    className="inline-flex items-center gap-2 transition-colors hover:text-white"
+                    className="inline-flex items-center gap-2 transition-colors hover:text-black"
                   >
                     <Mail className="h-3.5 w-3.5" /> {p.email}
                   </a>
@@ -161,7 +161,7 @@ export function CtaBand({ title, text }) {
             parts={title ?? t.cta.title}
             className="mx-auto mt-4 max-w-3xl text-5xl leading-[1.05] lg:text-7xl"
           />
-          <p className="mx-auto mt-5 max-w-xl text-base text-white/80">{text ?? t.cta.text}</p>
+          <p className="mx-auto mt-5 max-w-xl text-base text-black/80">{text ?? t.cta.text}</p>
           <PillButton onClick={openContact} className="mt-8">
             {t.cta.button}
           </PillButton>

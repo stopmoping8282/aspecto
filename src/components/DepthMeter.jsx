@@ -32,18 +32,18 @@ export default function DepthMeter() {
         className="liquid-glass-strong fixed right-3 top-1/2 z-30 hidden -translate-y-1/2 flex-col items-center gap-3 rounded-full px-3 py-5 lg:flex"
         aria-hidden="true"
       >
-        <span className="text-[10px] uppercase tracking-widest text-white/50">{t.depthLabel}</span>
+        <span className="text-[10px] uppercase tracking-widest text-black/50">{t.depthLabel}</span>
         <div className="relative h-44 w-6">
-          <div className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-white/20" />
+          <div className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-black/20" />
           {Array.from({ length: 9 }).map((_, i) => (
             <span
               key={i}
-              className={`absolute left-1/2 h-px -translate-x-1/2 bg-white/40 ${i % 2 ? 'w-2' : 'w-4'}`}
+              className={`absolute left-1/2 h-px -translate-x-1/2 bg-black/40 ${i % 2 ? 'w-2' : 'w-4'}`}
               style={{ top: `${(i / 8) * 100}%` }}
             />
           ))}
           <span
-            className="absolute left-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white ring-4 ring-white/25"
+            className="absolute left-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-black ring-4 ring-black/25"
             style={{ top: `${progress * 100}%` }}
           />
         </div>

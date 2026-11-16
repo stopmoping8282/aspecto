@@ -7,25 +7,13 @@
 }
 
 :root {
-  /* ink = text and line colour, paper = page colour. Dark theme by default. */
-  --ink: 255 255 255;
-  --paper: 10 10 10;
-  --glass: 255 255 255;
-  --glass-alpha: 0.01;
+  /* ink = text and line colour on the white page */
+  --ink: 10 10 10;
+  --paper: 255 255 255;
   --depth: 0;
   --veil: 1;
   --px: 0;
   --py: 0;
-}
-
-/* White version: swap ink and paper, and flip Tailwind's white/black utilities with them */
-[data-theme='light'] {
-  --ink: 10 10 10;
-  --paper: 255 255 255;
-  --glass: 10 10 10;
-  --glass-alpha: 0.035;
-  --color-white: #0a0a0a;
-  --color-black: #ffffff;
 }
 
 html {
@@ -72,17 +60,8 @@ h3 i,
   transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
-/* Dark theme: gets darker the deeper you scroll */
+/* The video shows in the homepage hero, then a white veil covers it as you scroll */
 .bg-depth {
-  background: linear-gradient(
-    180deg,
-    rgb(0 0 0 / calc(0.28 + var(--depth) * 0.42)) 0%,
-    rgb(0 0 0 / calc(0.38 + var(--depth) * 0.47)) 100%
-  );
-}
-
-/* White theme: the video shows in the hero, then a white veil covers it as you scroll */
-[data-theme='light'] .bg-depth {
   background: rgb(255 255 255 / calc(var(--veil) * 0.94));
 }
 
@@ -93,7 +72,7 @@ h3 i,
     position: relative;
     overflow: hidden;
     border: none;
-    background: rgb(var(--glass) / var(--glass-alpha));
+    background: rgb(var(--ink) / 0.035);
     background-blend-mode: luminosity;
   }
 
